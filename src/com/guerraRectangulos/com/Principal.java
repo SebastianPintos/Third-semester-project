@@ -15,6 +15,15 @@ public class Principal {
 		ganador = gr.jugar();
 		ganador = gr.jugar();
 		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
+		ganador = gr.jugar();
 		System.out.println(gr);
 		//     EJEMPLO AUTOMATICO  //
 		/*
