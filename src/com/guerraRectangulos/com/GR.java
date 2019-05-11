@@ -4,7 +4,7 @@ import java.util.*;
 
 public class GR {
 
-	private int turno;
+	public int turno;
 	private String ganador = "";
 	private int largoTablero;
 	private int anchoTablero;
@@ -13,6 +13,9 @@ public class GR {
 	private int puntosJ2;
 	private int[] cursor;
 	private int turnosPerdidos = 0;
+	private LinkedList<Rectangulo> rectangulosJ1;
+	private LinkedList<Rectangulo> rectangulosJ2;
+	private Rectangulo ultimoRectangulo;
 
 	public GR(int a, int l) {
 		this.anchoTablero = a;
@@ -26,6 +29,8 @@ public class GR {
 		puntosJ1 = 0;
 		puntosJ2 = 0;
 		cursor = new int[2];
+		rectangulosJ1 = new LinkedList<Rectangulo>();
+		rectangulosJ2 = new LinkedList<Rectangulo>();
 	}
 
 	@Override
@@ -58,16 +63,17 @@ public class GR {
 			int ancho = a.nextInt(anchoTablero / 3) + 2;
 			int largo = l.nextInt(largoTablero / 3) + 2;
 			Rectangulo rec = new Rectangulo(ancho, largo);
-			System.out.print("Turno: "+String.valueOf((char) (turno + 64)) + " tp: "+turnosPerdidos);
-			System.out.print(" ancho rectangulo: "+ancho);
-			System.out.println(" largo rectangulo: "+largo);
 			
+
 			if (turno % 2 == 1) {
 				if (verificacion1(ancho, largo)) {
 
 					int xLibre = cursor[0];
 					int yLibre = cursor[1];
-
+					
+					rec.setCoordenadas(xLibre, yLibre, xLibre + rec.getLargo(), yLibre + rec.getAncho());
+					rectangulosJ1.add(rec);
+					ultimoRectangulo = rec;
 					for (int i = xLibre; i < xLibre + rec.getAncho(); i++) {
 						for (int j = yLibre; j < yLibre + rec.getLargo(); j++) {
 							tablero[i][j] = 'X';
@@ -83,9 +89,15 @@ public class GR {
 					turnosPerdidos++;
 
 			} else if (turno % 2 == 0) {
+				
 				if (verificacion2(ancho, largo)) {
 					int xLibre = cursor[0];
 					int yLibre = cursor[1];
+					
+					rec.setCoordenadas(xLibre, yLibre, xLibre - rec.getLargo(), yLibre - rec.getAncho());
+					rectangulosJ2.add(rec);
+					ultimoRectangulo = rec;
+
 					for (int i = xLibre; i > xLibre - rec.getAncho(); i--) {
 						for (int j = yLibre; j > yLibre - rec.getLargo(); j--) {
 							tablero[i][j] = 'O';
@@ -115,33 +127,40 @@ public class GR {
 		return ganador;
 	}
 
+	public void eliminarRect() {
+
+	}
+
+	public Rectangulo ultimoRectangulo() {
+			return ultimoRectangulo;
+	}
+
 	private boolean verificacion1(int a, int l) {
 		boolean acu1 = true;
 		for (int i = 0; i < anchoTablero; i++) {
 			for (int j = 0; j < largoTablero; j++) {
 				if (tablero[i][j] == ' ') {
 					if (j + l <= largoTablero) {
-						
+
 						for (int x = i; x < i + a; x++) {
 							for (int y = j; y < j + l; y++) {
-								if(i+a <anchoTablero && j+l < largoTablero) {
-								acu1 = acu1 && tablero[x][y] == ' ';
-								}
-								else
-									acu1=false;
+								if (i + a < anchoTablero && j + l < largoTablero) {
+									acu1 = acu1 && tablero[x][y] == ' ';
+								} else
+									acu1 = false;
 								if (!acu1)
 									break;
 							}
 							if (!acu1)
 								break;
 						}
-						
+
 						if (acu1) {
 							cursor[0] = i;
 							cursor[1] = j;
 							return true;
 						}
-						acu1=true;
+						acu1 = true;
 					}
 				}
 			}
@@ -157,24 +176,23 @@ public class GR {
 					if (j - l >= 0) {
 						for (int x = i; x > i - a; x--) {
 							for (int y = j; y > j - l; y--) {
-								if(i-a >0 && j-l >0) {
+								if (i - a > 0 && j - l > 0) {
 									acu1 = acu1 && tablero[x][y] == ' ';
-								}
-								else
-									acu1=false;
+								} else
+									acu1 = false;
 								if (!acu1)
 									break;
 							}
 							if (!acu1)
 								break;
 						}
-						
+
 						if (acu1) {
 							cursor[0] = i;
 							cursor[1] = j;
-							return true;							
+							return true;
 						}
-						acu1=true;
+						acu1 = true;
 
 					}
 				}
