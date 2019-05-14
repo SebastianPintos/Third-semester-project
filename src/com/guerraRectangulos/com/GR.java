@@ -71,7 +71,7 @@ public class GR {
 					int xLibre = cursor[0];
 					int yLibre = cursor[1];
 					
-					rec.setCoordenadas(xLibre, yLibre, xLibre + rec.getLargo(), yLibre + rec.getAncho());
+					rec.setCoordenadas(yLibre, xLibre, yLibre + rec.getLargo(), xLibre + rec.getAncho());
 					rectangulosJ1.add(rec);
 					ultimoRectangulo = rec;
 					for (int i = xLibre; i < xLibre + rec.getAncho(); i++) {
@@ -94,7 +94,7 @@ public class GR {
 					int xLibre = cursor[0];
 					int yLibre = cursor[1];
 					
-					rec.setCoordenadas(xLibre, yLibre, xLibre - rec.getLargo(), yLibre - rec.getAncho());
+					rec.setCoordenadas(yLibre, xLibre, yLibre - rec.getLargo(), xLibre - rec.getAncho());
 					rectangulosJ2.add(rec);
 					ultimoRectangulo = rec;
 
@@ -128,7 +128,37 @@ public class GR {
 	}
 
 	public void eliminarRect() {
-
+		turno++;
+		Random r = new Random();
+		if (turno%2==0 && rectangulosJ1.size()>0) {
+			int random = r.nextInt(rectangulosJ1.size());
+			System.out.println(random);
+			System.out.println(turno);
+			System.out.print(rectangulosJ1.get(random).getx1());
+			System.out.print(rectangulosJ1.get(random).gety1());
+			System.out.print(rectangulosJ1.get(random).getx2());
+			System.out.println(rectangulosJ1.get(random).gety2());
+			for(int i = rectangulosJ1.get(random).gety1(); i< rectangulosJ1.get(random).gety2();i++) {
+				for(int j = rectangulosJ1.get(random).getx1(); j< rectangulosJ1.get(random).getx2();j++) {
+					tablero[i][j] = ' ';
+				}
+			}
+			rectangulosJ1.remove(random);
+		}
+		if (turno%2==1 && rectangulosJ2.size()>0) {
+			int random = r.nextInt(rectangulosJ2.size());
+			System.out.println(random);
+			System.out.print(rectangulosJ2.get(random).getx1());
+			System.out.print(rectangulosJ2.get(random).gety1());
+			System.out.print(rectangulosJ2.get(random).getx2());
+			System.out.println(rectangulosJ2.get(random).gety2());
+			for(int i = rectangulosJ2.get(random).gety1(); i> rectangulosJ2.get(random).gety2();i--) {
+				for(int j = rectangulosJ2.get(random).getx1(); j> rectangulosJ2.get(random).getx2();j--) {
+					tablero[i][j] = ' ';
+				}
+			}
+			rectangulosJ2.remove(random);
+		}
 	}
 
 	public Rectangulo ultimoRectangulo() {
@@ -140,7 +170,7 @@ public class GR {
 		for (int i = 0; i < anchoTablero; i++) {
 			for (int j = 0; j < largoTablero; j++) {
 				if (tablero[i][j] == ' ') {
-					if (j + l <= largoTablero) {
+					if (j + l < largoTablero) {
 
 						for (int x = i; x < i + a; x++) {
 							for (int y = j; y < j + l; y++) {
